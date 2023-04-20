@@ -9,6 +9,7 @@ namespace SpeurBOT
         readonly static ChatClient _chatClient;
         readonly static ObsClient _obsClient;
         readonly static TtsEngine _ttsEngine;
+        readonly static string _speurnaut;
 
         static Program()
         {
@@ -44,7 +45,7 @@ namespace SpeurBOT
                 {
                     if (twitchChatMessage.Message.StartsWith("!status"))
                     {
-                        await Commands.Status(_chatClient, _obsClient.Connected, _ttsEngine);
+                        if (twitchChatMessage.Sender == _speurnaut) await Commands.Status(_chatClient, _obsClient.Connected, _ttsEngine);
                     }
                     if (twitchChatMessage.Message.StartsWith("!alarm"))
                     {
