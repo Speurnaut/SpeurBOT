@@ -51,7 +51,7 @@ namespace SpeurBOT.Clients
             _ttsEngine.Say(message);
             Thread.Sleep(100); // Ensure isSpeaking = true before we start checking
 
-            while (_ttsEngine.IsSpeaking) { } // wait for TTS to finish
+            while (_ttsEngine.IsSpeaking) { Thread.Sleep(1); } // wait for TTS to finish
 
             SetSourceActive("TTS", false);
 
