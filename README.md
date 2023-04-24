@@ -58,6 +58,8 @@ The bot can display Text-To-Speech messages onscreen in OBS, by writing messages
 
 Either run the bot from your IDE, or compile an .exe and run it. The bot will automatically attempt to connect to Twitch chat and OBS using the details you have entered. Check the console window to see if the bot was able to successfully connect. If the connection was succesful, you can enter the built-in commands into the Twitch Channel that your bot is connected to in order to test if it is working.
 
+To use the on-screen TTS display, you will need to specify where you want the HTML file to be saved in `appsettings.json`. You should also copy `style.css` and `anonymous.png` to this directory. In order to have TTS users recognized and displayed, download their avatar to this directory using the format `<TwitchUsername>.png`, and then add their Twitch username to the list of known TTS users at the top of `ObsClient.cs`.
+
 ## Commands
 
 `!status` - the bot will report the status of each major component. It will post to Twitch Chat, confirming that it is connected to Twitch Chat and to the OBS WebSocket Server, and the Text-To-Speech Engine will make an audio announcement.
