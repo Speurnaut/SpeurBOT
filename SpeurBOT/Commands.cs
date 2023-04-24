@@ -12,19 +12,19 @@ namespace SpeurBOT
             ttsEngine.Say("TTS is enabled.");
         }
 
-        public static async Task Alarm(ObsClient obsClient, string? message)
+        public static async Task Alarm(ObsClient obsClient, string? message, string sender)
         {
             obsClient.Alarm();
             if (!string.IsNullOrEmpty(message))
             {
-                obsClient.TextToSpeech(message);
+                obsClient.TextToSpeech(message, sender);
             }
         }
 
-        public static async Task TTS(ObsClient obsClient, string message)
+        public static async Task TTS(ObsClient obsClient, string message, string sender)
         {
             if (string.IsNullOrEmpty(message)) return;
-            obsClient.TextToSpeech(message);
+            obsClient.TextToSpeech(message, sender);
         }
     }
 }

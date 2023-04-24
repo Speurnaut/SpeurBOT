@@ -8,6 +8,12 @@ namespace SpeurBOT.Clients
     public class ObsClient
     {
         const string logPrefix = "//OBSClient//: ";
+        private readonly List<string> ttsUsers = new()
+        {
+            "speurnaut",
+            "speurbot",
+            "wyn_ryu"
+        };
 
         private OBSWebsocket _obs;
         private TtsEngine _ttsEngine;
@@ -22,8 +28,9 @@ namespace SpeurBOT.Clients
             _ttsEngine = new TtsEngine();
         }
 
-        public void Start(string url, string password, string? groupName = null)
+        public void Start(string url, string password, string ttsFilePath, string? groupName = null)
         {
+            _ttsFilePath = ttsFilePath;
             Log("Connecting to OBS...");
             if (!string.IsNullOrEmpty(groupName)) _groupName = groupName;
             _obs = new OBSWebsocket();
@@ -35,16 +42,49 @@ namespace SpeurBOT.Clients
             _obs.ConnectAsync(url, password);
         }
 
-        public async Task TextToSpeech(string message)
+        public async Task TextToSpeech(string message, string? sender)
         {
+            var trimmedMessage = message;
+
+            var senderAvatar = sender;
+
+            if (!ttsUsers.Contains(sender))
+            {
+                senderAvatar = "anonymous";
+            }
+
+            if (string.IsNullOrEmpty(sender))
+            {
+                sender = "anonymous";
+            }
+
+            int fontSize;
+
+            if (message.Length <= 68)
+            {
+                fontSize = 47;
+            } 
+            else if (message.Length <= 101)
+            {
+                fontSize = 32;
+            }
+            else if (message.Length <= 271)
+            {
+                fontSize = 24;
+            }
+            else
+            {
+                fontSize = 24;
+                trimmedMessage = message.Substring(0, 268) + "...";
+            }
 
             while (_ttsEngine.IsSpeaking){ Thread.Sleep(100); }
 
             // Write message to local HTML file, which is registered as a browser source in OBS.
-            string text = $"<html><span>{message}</span></html>";
+            string text = $"<html><head><link rel=\"stylesheet\" href=\"style.css\"></head><body><div class=\"wrapper\"><div class=\"row\"><div class=\"column left\"><div id=\"message\" style=\"font-size: {fontSize}px\">\"{trimmedMessage}\"</div></div><div class=\"column right\"><img id=\"avatar\" src=\"{senderAvatar}.png\" /></div></div><div class=\"row\"><div class=\"column full\"><div id=\"username\">- {sender}</div></div></div></div></body></html>";
             await File.WriteAllTextAsync(_ttsFilePath, text);
 
-            Thread.Sleep(500); // Give the source time to update before it is shown on screen
+            Thread.Sleep(1000); // Give the source time to update before it is shown on screen
 
             SetSourceActive("TTS", true);
 

@@ -28,7 +28,7 @@ namespace SpeurBOT
             IConfiguration config = builder.Build();
             _ = StartChatClient(config["twitch:nick"], config["twitch:pass"], config["twitch:channel"]);
             var obsWebsocketUrl = $"ws://{config["obs:ip"]}:{config["obs:port"]}";
-            StartObsClient(obsWebsocketUrl, config["obs:password"], config["obs:sourceGroup"]);
+            StartObsClient(obsWebsocketUrl, config["obs:password"], config["obs:ttsFilePath"], config["obs:sourceGroup"]);
 
             await Task.Delay(-1);
         }
@@ -49,19 +49,19 @@ namespace SpeurBOT
                     }
                     if (twitchChatMessage.Message.StartsWith("!alarm"))
                     {
-                        await Commands.Alarm(_obsClient, GetTwitchMessageWithoutCommand(twitchChatMessage));
+                        await Commands.Alarm(_obsClient, GetTwitchMessageWithoutCommand(twitchChatMessage), twitchChatMessage.Sender);
                     }
                     if (twitchChatMessage.Message.StartsWith("!tts"))
                     {
-                        await Commands.TTS(_obsClient, GetTwitchMessageWithoutCommand(twitchChatMessage));
+                        await Commands.TTS(_obsClient, GetTwitchMessageWithoutCommand(twitchChatMessage), twitchChatMessage.Sender);
                     }
                 }
             };
         }
 
-        static void StartObsClient(string url, string password, string? sourceGroup)
+        static void StartObsClient(string url, string password, string ttsFilePath, string? sourceGroup)
         {
-            _obsClient.Start(url, password, sourceGroup);
+            _obsClient.Start(url, password, ttsFilePath, sourceGroup);
         }
 
         private void onConnect(object sender, EventArgs e)

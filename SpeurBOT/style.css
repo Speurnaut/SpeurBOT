@@ -1,0 +1,57 @@
+/* Copy this stylesheet to the same directory as your local TTS HTML File */
+
+body {
+	margin: 0;
+	color: white;
+	font-family: monospace;
+}
+
+#avatar {
+	height: 70px;
+	width: 70px;
+}
+
+.wrapper {
+	background-color: rgba(0,0,0,0.5);
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
+
+.column {
+	float: left;
+}
+
+.left {
+	min-height: 70px;
+	width: calc(100vw - 70px);
+}
+
+.right {
+	width: 70px;
+}
+
+.full {
+	width: 100vw;
+}
+
+.row:after {
+  content: "";
+	display: table;
+	clear: both;
+}
+
+#message {
+	overflow: hidden;
+	width: auto;
+	align-items: center;
+	height: 60px;
+	text-align: right;
+	padding: 10px 10px 0 10px;
+}
+
+#username {
+	text-align: right;
+	font-size: 20px;
+	padding: 10px;
+}
